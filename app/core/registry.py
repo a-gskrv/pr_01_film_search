@@ -3,8 +3,6 @@ from typing import Dict, Any
 
 from app.core import services
 
-# from pprint import pprint
-
 ACTION_REGISTRY: Dict[str, dict[str, Any]] = {}
 
 
@@ -44,15 +42,3 @@ register_action(
     handler=services.search_by_year,
     parameters=["year", "limit", "offset"],
 )
-
-# pprint(ACTION_REGISTRY)
-
-#
-# dict_main_menu = {
-#     "0": {"name": "EXIT.", "func": exit},
-#     "1": {"name": "Найти фильм по ключевому слову.", "func": search_film.search_film_keyword},
-#     "2": {"name": "Найти фильм по жанру и диапазону годов выпуска.", "func": search_film.search_film_category_year},
-#     "3": {"name": "Найти фильм по жанру.", "func": search_film.search_film_category},
-#     "4": {"name": "Найти фильм по диапазону годов выпуска.", "func": search_film.search_film_year},
-#     "5": {"name": "Посмотреть ТОП самых популярных запросов.", "func": get_queries.get_queries_top_search},
-#     "6": {"name": "Посмотреть последние уникальные запросы.", "func": get_queries.get_queries_recent_unique},
