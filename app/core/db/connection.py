@@ -6,7 +6,7 @@ from local_settings import dbconfig
 class DatabaseConnectionError(RuntimeError):
     pass
 
-def get_mysql_connection():
+def create_mysql_connection():
     try:
         connection = mysql.connector.connect(**dbconfig)
         return connection
@@ -15,4 +15,4 @@ def get_mysql_connection():
 
 
 if __name__ == '__main__':
-    print(get_mysql_connection())
+    print(create_mysql_connection())
