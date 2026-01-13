@@ -13,6 +13,9 @@ def create_mysql_connection():
     except mysql.connector.Error as err:
         raise DatabaseConnectionError("Failed to connect to MySQL") from err
 
+def get_mysql_connection():
+    return create_mysql_connection()
+
 
 if __name__ == '__main__':
-    print(create_mysql_connection())
+    print(get_mysql_connection())
