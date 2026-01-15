@@ -12,7 +12,7 @@ def calculate_total_pages(total: int, page_size: int) -> int:
 
 class FilmSearchService:
 
-    def search_by_keyword(self, keyword, page_size: int = 10, page: int = 1):
+    def search_by_keyword(self, keyword, page_size: int = 10, page: int = 1, **kwargs):
         conn = get_mysql_connection()
 
         offset = (page - 1) * page_size
@@ -31,7 +31,7 @@ class FilmSearchService:
         finally:
             conn.close()
 
-    def search_by_category(self, category, page_size: int = 10, page: int = 1):
+    def search_by_category(self, category, page_size: int = 10, page: int = 1, **kwargs):
         conn = get_mysql_connection()
 
         offset = (page - 1) * page_size
@@ -50,7 +50,7 @@ class FilmSearchService:
         finally:
             conn.close()
 
-    def search_by_category_year(self, category, year_from, year_to, page_size: int = 10, page: int = 1):
+    def search_by_category_year(self, category, year_from, year_to, page_size: int = 10, page: int = 1, **kwargs):
         conn = get_mysql_connection()
 
         offset = (page - 1) * page_size
