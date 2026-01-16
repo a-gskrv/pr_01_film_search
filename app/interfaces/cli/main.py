@@ -18,6 +18,10 @@ def main():
             handlers.search_film_by_category(fs_service)
         elif user_choice == '3':
             handlers.search_film_by_category_year(fs_service)
+        elif user_choice == '4':
+            handlers.get_last_unique_queries()
+        elif user_choice == '5':
+            handlers.get_top_5queries()
 
 
 if __name__ == '__main__':

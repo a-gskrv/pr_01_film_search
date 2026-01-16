@@ -1,8 +1,8 @@
-from app.core.services import FilmSearchService
+from pprint import pprint
+
+from app.core.services import FilmSearchService, QueryLogService
 from app.interfaces.cli.user_settings import msg, page_size
 from app.interfaces.cli import formatters
-
-
 
 
 def search_film_by_keyword(fs_service: FilmSearchService):
@@ -10,9 +10,9 @@ def search_film_by_keyword(fs_service: FilmSearchService):
     paginate(fs_service.search_by_keyword, keyword=user_input)
 
 
-def select_category_id(fs_service: FilmSearchService):
+def select_category(fs_service: FilmSearchService):
     list_category = fs_service.list_all_categories()
-    category_id = None
+    dict_category = None
 
     formatters.print_categories(list_category)
 
@@ -24,15 +24,17 @@ def select_category_id(fs_service: FilmSearchService):
             return None
         category = list_category[selected_index - 1]
         category_id = category.get('category_id')
-    return category_id
+        category_name = category.get('name')
+        dict_category = {"category_id": category_id, "category_name": category_name}
+    return dict_category
 
 
 def search_film_by_category(fs_service: FilmSearchService):
-    category_id = select_category_id(fs_service)
-    if category_id is None:
+    dict_category = select_category(fs_service)
+    if dict_category is None:
         return None
 
-    paginate(fs_service.search_by_category, category=category_id)
+    paginate(fs_service.search_by_category, dict_category=dict_category)
 
 
 def normalize_year_range_input(period, year_1: str, year_2: str):
@@ -76,11 +78,13 @@ def get_year_range_input(period):
 
 
 def search_film_by_category_year(fs_service: FilmSearchService):
-    category_id = select_category_id(fs_service)
-    if category_id is None:
+    dict_category = select_category(fs_service)
+    if dict_category is None:
         return None
 
-    get_period = fs_service.get_year_range_by_category_id(category_id)
+    category_id = dict_category.get("category_id")
+
+    get_period = fs_service.get_year_range_by_category(dict_category)
     if get_period is None:
         print(msg.not_found)
         return None
@@ -89,7 +93,7 @@ def search_film_by_category_year(fs_service: FilmSearchService):
     year_from = years_period.get("year_from")
     year_to = years_period.get("year_to")
 
-    paginate(fs_service.search_by_category_year, category=category_id, year_from=year_from, year_to=year_to)
+    paginate(fs_service.search_by_category_year, dict_category=dict_category, year_from=year_from, year_to=year_to)
 
 
 def paginate(fetch_page_fn, **kwargs):
@@ -103,7 +107,7 @@ def paginate(fetch_page_fn, **kwargs):
         print("*" * 50, "\n")
         if not is_first_page:
             use_select = input(msg.menu_pagination).strip()
-        is_first_page = False
+
         if use_select == '0':
             break
         elif use_select.isnumeric():
@@ -129,7 +133,7 @@ def paginate(fetch_page_fn, **kwargs):
 
         if page <= pages:
             kwargs['page'] = page
-            result = fetch_page_fn(**kwargs)
+            result = fetch_page_fn(log=is_first_page, **kwargs)
             items = result.get('items')
             if items:
                 start_i = page * page_size - page_size + 1
@@ -142,7 +146,23 @@ def paginate(fetch_page_fn, **kwargs):
             print(msg.page_info.format(page=page, pages=pages))
 
             if result['pages'] == 1:
+                input(msg.press_enter_to_return_to_menu)
                 break
         else:
             print(msg.invalid_page_number.format(page=page, pages=pages))
             page = last_valid_page
+        is_first_page = False
+
+
+def get_top_5queries():
+    qs = QueryLogService()
+    result = qs.get_top_queries(limit=5)
+    formatters.print_top_queries(result)
+    input(msg.press_enter_to_return_to_menu)
+
+
+def get_last_unique_queries():
+    qs = QueryLogService()
+    result = qs.get_last_unique_queries()
+    formatters.print_last_unique_queries(result)
+    input(msg.press_enter_to_return_to_menu)
