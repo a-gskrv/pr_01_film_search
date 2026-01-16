@@ -5,6 +5,10 @@ class RuCliMessages():
 2. по жанру.
 3. по жанру и периоду.
 
+Отчеты:
+4. Пять последних запросов.
+5. Топ пять популярных запросов.
+
 0. Выход.
 
 Введите номер пункта меню: """
@@ -34,6 +38,8 @@ class RuCliMessages():
 
     not_found: str = "Не найдено!"
     input_error: str = "Ошибка ввода"
+
+    press_enter_to_return_to_menu = "Нажмите Enter, чтобы вернуться в меню. "
 
 
 class EnCliMessages():
@@ -72,6 +78,8 @@ Navigation: Next - N, Previous - P, Quit - 0, or enter a page number: """
 
     not_found: str = "Not found!"
     input_error: str = "Invalid input"
+
+    press_enter_to_return_to_menu = "Press Enter to return to the menu. "
 
 #
 # menu_keyword_ru = """

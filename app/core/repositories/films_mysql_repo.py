@@ -110,7 +110,8 @@ def list_categories(conn) -> list[dict]:
         return items
 
 
-def get_year_range_by_category_id(conn, category_id) -> list[dict]:
+def get_year_range_by_category(conn, dict_category) -> list[dict]:
+    category_id = dict_category.get("category_id")
     with conn.cursor(dictionary=True) as cursor:
         parameters = {"category_id": category_id}
         cursor.execute(GET_YEAR_RANGE_BY_CATEGORY_ID_SQL, parameters)
