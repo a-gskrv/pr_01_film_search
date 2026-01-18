@@ -1,0 +1,26 @@
+{% extends "base_page.html" %}
+
+{% block content %}
+<h1>Statistics</h1>
+
+{% if stats %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Query</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in stats %}
+    <tr>
+      <td>{{ row.id }}</td>
+      <td>{{ row.query }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Нет данных</p>
+{% endif %}
+{% endblock %}

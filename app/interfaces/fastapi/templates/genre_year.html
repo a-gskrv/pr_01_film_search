@@ -1,0 +1,53 @@
+{% extends "base_page.html" %}
+
+{% block content %}
+<h1>Search by year</h1>
+
+<form method="post" action="/search/genre_year" class="row g-3 mb-4">
+
+  <div class="col-md-3">
+    <select name="genre" class="form-select">
+    <option value="">All genres</option>
+    {% for g in genres %}
+      <option value="{{ g }}"
+        {% if g == selected_genre %}selected{% endif %}
+      >
+        {{ g }}
+      </option>
+    {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-3">
+    <input
+      type="number"
+      name="year_from"
+      class="form-control"
+      placeholder="Year from"
+      min="1900"
+      max="2100"
+      value="{{ year_from }}"
+      required
+    >
+  </div>
+
+  <div class="col-md-3">
+    <input
+      type="number"
+      name="year_to"
+      class="form-control"
+      placeholder="{{ year_to }}"
+      min="1900"
+      max="2100"
+      value="2025"
+      required
+    >
+  </div>
+
+  <div class="col-md-3">
+    <button class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+{% include "films_table.html" %}
+{% endblock %}

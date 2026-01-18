@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title or "Films" }}</title>
+  <link href="../static/bootstrap/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="/">Films</a>
+
+    <ul class="navbar-nav me-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+          Search by...
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="/genres">Genres</a></li>
+          <li><a class="dropdown-item" href="/search/keyword">Keyword</a></li>
+          <li><a class="dropdown-item" href="/search/year">Year</a></li>
+          <li><a class="dropdown-item" href="/search/genre_year">Genre-Year</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/statistics">Statistics</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  {% block content %}{% endblock %}
+</div>
+
+<script src="../static/bootstrap/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

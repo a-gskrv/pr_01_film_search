@@ -1,8 +1,12 @@
+import subprocess
+import sys
+
+
 def main():
     while True:
         print("\nSelect interface:")
         print("1) CLI")
-        print("2) FastAPI (coming soon)")
+        print("2) FastAPI")
         print("0) Exit")
 
         choice = input("> ").strip()
@@ -12,8 +16,24 @@ def main():
             cli_main()
 
         elif choice == "2":
-            print("FastAPI is not implemented yet.")
-            input("Press Enter to return to the menu...")
+            print("Starting FastAPI server...")
+
+            proc = subprocess.Popen(
+                [
+                    sys.executable,
+                    "-m",
+                    "uvicorn",
+                    "app.interfaces.fastapi.main:app",
+                    "--reload",
+                    "--port", "8001"
+
+                ]
+            )
+
+            print("FastAPI is running at http://127.0.0.1:8001")
+            input("Press Enter to stop the server and return to the menu...")
+
+            proc.terminate()
 
         elif choice == "0":
             break

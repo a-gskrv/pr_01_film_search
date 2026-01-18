@@ -1,0 +1,39 @@
+{% extends "base_page.html" %}
+
+{% block content %}
+<h1>Search by year</h1>
+
+<form method="post" action="/search/year" class="row g-3 mb-4">
+  <div class="col-md-3">
+    <input
+      type="number"
+      name="year_from"
+      class="form-control"
+      placeholder="Year from"
+      min="1900"
+      max="2100"
+      value="1900"
+      required
+    >
+  </div>
+
+  <div class="col-md-3">
+    <input
+      type="number"
+      name="year_to"
+      class="form-control"
+      placeholder="Year to"
+      min="1900"
+      max="2100"
+      value="2025"
+      required
+    >
+  </div>
+
+  <div class="col-md-3">
+    <button class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+{% include "films_table.html" %}
+{% endblock %}

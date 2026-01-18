@@ -1,0 +1,28 @@
+{% extends "base_page.html" %}
+
+{% block content %}
+<h1>Genres</h1>
+
+{% if genres %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Genre</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for genre in genres %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>
+        <a href="/genres/{{ genre }}?page=1">{{ genre }}</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Нет данных</p>
+{% endif %}
+{% endblock %}

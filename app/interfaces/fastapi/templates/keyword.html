@@ -1,0 +1,18 @@
+{% extends "base_page.html" %}
+
+{% block content %}
+<h1>Search by keyword</h1>
+
+<form method="post" class="mb-4">
+  <input
+    type="text"
+    name="keyword"
+    class="form-control"
+    placeholder="Enter keyword"
+    required
+  >
+  <button class="btn btn-primary mt-2">Search</button>
+</form>
+
+{% include "films_table.html" %}
+{% endblock %}
