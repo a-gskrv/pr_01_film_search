@@ -1,13 +1,23 @@
 from collections.abc import Callable
-from typing import Dict, Any
+from typing import Any
 
-from app.core import services
+from app.core.services import FilmSearchService
+from app.core.query_log_service import QueryLogService
 
-ACTION_REGISTRY: Dict[str, dict[str, Any]] = {}
+
+ACTION_REGISTRY: dict[str, dict[str, Any]] = {}
 
 
-def register_action(action_id: str, title: str, handler: Callable, parameters: list[str],) -> None:
+def register_action(action_id: str, title: str, handler: Callable[..., Any], parameters: list[str]) -> None:
+    """
+    Register an action in the global action registry.
 
+    Args:
+        action_id: Unique action identifier.
+        title: Human-readable action title.
+        handler: Callable handler for the action.
+        parameters: List of parameter names required for the action.
+    """
     ACTION_REGISTRY[action_id] = {
         "id": action_id,
         "title": title,
@@ -15,30 +25,41 @@ def register_action(action_id: str, title: str, handler: Callable, parameters: l
         "parameters": parameters,
     }
 
+
+# --- Film search actions ---
 register_action(
     action_id="search_by_keyword",
     title="Search films by keyword",
-    handler=services.search_by_keyword,
-    parameters=["keyword", "limit", "offset"],
-)
-
-register_action(
-    action_id="search_by_category_year",
-    title="Search films by category and year range",
-    handler=services.search_by_category_year,
-    parameters=["category", "year", "limit", "offset"],
+    handler=FilmSearchService().search_by_keyword,
+    parameters=["keyword"],
 )
 
 register_action(
     action_id="search_by_category",
     title="Search films by category",
-    handler=services.search_by_category,
-    parameters=["category", "limit", "offset"],
+    handler=FilmSearchService().search_by_category,
+    parameters=["dict_category"],
 )
 
 register_action(
-    action_id="search_by_year",
-    title="Search films by year range",
-    handler=services.search_by_year,
-    parameters=["year", "limit", "offset"],
+    action_id="search_by_category_year",
+    title="Search films by category and year range",
+    handler=FilmSearchService().search_by_category_year,
+    parameters=["dict_category", "year_from", "year_to"],
+)
+
+
+# --- Reports ---
+register_action(
+    action_id="report_last_unique_queries",
+    title="Report: last 5 unique queries",
+    handler=QueryLogService().get_last_unique_queries,
+    parameters=[],
+)
+
+register_action(
+    action_id="report_top_queries",
+    title="Report: top 5 most frequent queries",
+    handler=QueryLogService().get_top_queries,
+    parameters=[],
 )
