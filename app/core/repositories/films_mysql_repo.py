@@ -6,22 +6,43 @@ FROM category
 ;
 """
 
+GET_CATEGORIES_BY_NAME_SQL = """
+SELECT 
+    category_id,
+    name AS category_name
+FROM category
+WHERE
+    LOWER(name) = LOWER(%(category_name)s)
+;
+"""
+
 SEARCH_FILMS_BY_TITLE_LIKE_SQL = """
 SELECT 
-    film_id,
-    title,
-    release_year
-FROM film
-WHERE LOWER(title) LIKE LOWER(%(keyword)s)
+    f.film_id,
+    f.title,
+    f.release_year,
+    c.name AS category_name
+FROM
+    film AS f
+        JOIN
+    film_category AS fc ON (f.film_id = fc.film_id)
+        JOIN
+    category AS c ON (fc.category_id = c.category_id)
+WHERE LOWER(f.title) LIKE LOWER(%(keyword)s)
 LIMIT %(limit)s
 OFFSET %(offset)s
 ;
 """
 
 COUNT_FILMS_BY_TITLE_LIKE_SQL = """
-SELECT COUNT(*) AS total
-FROM film
-WHERE LOWER(title) LIKE LOWER(%(keyword)s)
+SELECT COUNT(DISTINCT f.film_id) AS total
+FROM
+    film AS f
+        JOIN
+    film_category AS fc ON (f.film_id = fc.film_id)
+        JOIN
+    category AS c ON (fc.category_id = c.category_id)
+WHERE LOWER(f.title) LIKE LOWER(%(keyword)s)
 ;
 """
 
@@ -121,14 +142,22 @@ def list_categories(conn) -> list[dict]:
         return items
 
 
-def get_year_range_by_category(conn, dict_category: dict) -> list[dict]:
+def get_category_by_category_name(conn, category_name) -> dict:
+    with conn.cursor(dictionary=True) as cursor:
+        parameters = {"category_name": category_name}
+        cursor.execute(GET_CATEGORIES_BY_NAME_SQL, parameters)
+        items = cursor.fetchone()
+    return items
+
+
+
+def get_year_range_by_category(conn, category_id: str) -> list[dict]:
     """
     Get the available release year range for a selected category.
 
     Args:
-        conn: Active MySQL connection.
-        dict_category: Category info dict containing:
-            - category_id (int)
+        conn: Active MySQL connection:
+        category_id: Category ID.
 
     Returns:
         dict: Year range info with the following keys:
@@ -136,7 +165,7 @@ def get_year_range_by_category(conn, dict_category: dict) -> list[dict]:
             - year_to (int)
             - category (str)
     """
-    category_id = dict_category.get("category_id")
+
     with conn.cursor(dictionary=True) as cursor:
         parameters = {"category_id": category_id}
         cursor.execute(GET_YEAR_RANGE_BY_CATEGORY_ID_SQL, parameters)

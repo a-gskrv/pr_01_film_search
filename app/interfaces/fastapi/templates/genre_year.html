@@ -7,7 +7,7 @@
 
   <div class="col-md-3">
     <select name="genre" class="form-select">
-    <option value="">All genres</option>
+<!--    <option value="">All genres</option>-->
     {% for g in genres %}
       <option value="{{ g }}"
         {% if g == selected_genre %}selected{% endif %}
@@ -36,10 +36,10 @@
       type="number"
       name="year_to"
       class="form-control"
-      placeholder="{{ year_to }}"
+      placeholder="Year to"
       min="1900"
       max="2100"
-      value="2025"
+      value="{{ year_to }}"
       required
     >
   </div>
