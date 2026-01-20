@@ -25,12 +25,12 @@ def main():
                     "uvicorn",
                     "app.interfaces.fastapi.main:app",
                     "--reload",
-                    "--port", "8001"
+                    "--port", "8000"
 
                 ]
             )
 
-            print("FastAPI is running at http://127.0.0.1:8001")
+            print("FastAPI is running at http://127.0.0.1:8000")
             input("Press Enter to stop the server and return to the menu...")
 
             proc.terminate()

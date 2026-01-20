@@ -248,6 +248,7 @@ def paginate(fetch_page_fn: Callable[..., dict],
                 render_page(items, start_i)
             else:
                 print(msg.not_found)
+                input(msg.press_enter_to_return_to_menu)
                 break
             pages = result['pages']
             print(msg.page_info.format(page=page, pages=pages))

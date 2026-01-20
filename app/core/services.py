@@ -96,6 +96,7 @@ class FilmSearchService:
             - page_size (int): number of items per page
             - pages (int): total number of pages
     """
+        # print('services.search_by_keyword',keyword)
         conn = get_mysql_connection()
         # conn = self.connection
         offset = (page - 1) * page_size
@@ -250,8 +251,9 @@ class FilmSearchService:
                 - category (str): category name
         """
         conn = get_mysql_connection()
+        category_id = dict_category.get("category_id")
         try:
-            items = repo.get_year_range_by_category(conn, dict_category)
+            items = repo.get_year_range_by_category(conn, category_id)
             return items
         finally:
             conn.close()
@@ -273,6 +275,15 @@ class FilmSearchService:
             return repo.list_categories(conn)
         finally:
             conn.close()
+
+    def get_dict_category_by_name(self, category_name):
+        conn = get_mysql_connection()
+        try:
+            dict_category = repo.get_category_by_category_name(conn, category_name)
+            return dict_category
+        finally:
+            conn.close()
+
 
 
 class QueryLogService:
@@ -395,12 +406,13 @@ def log_search_query(search_type: str, params: dict) -> None:
 
 if __name__ == '__main__':
     search = FilmSearchService()
-    keyword = 'matrix'
-    print('keyword', keyword, search.search_by_keyword(keyword, log=False))
-    category = {"category_id": 1, "category_name": "Action"}
-    print('category', category.get("category_name"), search.search_by_category(category, log=False))
-    # category = 500
-    print('year_range_by_category_id', category.get("category_name"), search.get_year_range_by_category(category))
-    year_from = 1999
-    year_to = 2000
-    print('category_year', category, search.search_by_category_year(category, year_from, year_to, log=False))
+    print('get_dict_category_by_name', search.get_dict_category_by_name("Action"))
+    # keyword = 'matrix'
+    # print('keyword', keyword, search.search_by_keyword(keyword, log=False))
+    # category = {"category_id": 1, "category_name": "Action"}
+    # print('category', category.get("category_name"), search.search_by_category(category, log=False))
+    # # category = 500
+    # print('year_range_by_category_id', category.get("category_name"), search.get_year_range_by_category(category))
+    # year_from = 1999
+    # year_to = 2000
+    # print('category_year', category, search.search_by_category_year(category, year_from, year_to, log=False))

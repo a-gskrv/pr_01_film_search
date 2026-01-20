@@ -3,24 +3,61 @@
 {% block content %}
 <h1>Statistics</h1>
 
-{% if stats %}
+{% if last_unique %}
+<h2 class="mb-3">Last unique query</h2>
 <table class="table table-striped">
   <thead>
     <tr>
       <th>ID</th>
+      <th>Query Type</th>
       <th>Query</th>
+      <th>Last timestamp</th>
+      <th>Results</th>
     </tr>
   </thead>
   <tbody>
-    {% for row in stats %}
+    {% for row in last_unique %}
     <tr>
-      <td>{{ row.id }}</td>
+      <td>{{ row.idx }}</td>
+      <td>{{ row.type }}</td>
       <td>{{ row.query }}</td>
+      <td>{{ row.timestamp }}</td>
+      <td>{{ row.results }}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
-{% else %}
+{% endif %}
+
+{% if top_5_q %}
+<h2 class="mb-3">Top 5 Query</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Query Type</th>
+      <th>Query</th>
+      <th>Count</th>
+      <th>Results</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in top_5_q %}
+    <tr>
+    <tr>
+      <td>{{ row.idx }}</td>
+      <td>{{ row.type }}</td>
+      <td>{{ row.query }}</td>
+      <td>{{ row.count }}</td>
+      <td>{{ row.results }}</td>
+    </tr>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if not top_5_q and not last_unique %}
 <p>Нет данных</p>
 {% endif %}
 {% endblock %}
