@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+jinja2
+
+mysql-connector-python=9.0.0
+pymongo

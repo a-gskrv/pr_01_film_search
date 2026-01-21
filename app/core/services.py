@@ -1,6 +1,6 @@
-import traceback
 from collections import defaultdict
 from datetime import datetime
+from typing import Optional, Any, Tuple
 
 from pymongo.errors import PyMongoError
 
@@ -59,13 +59,66 @@ def get_format_date(timestamp: str) -> str:
         Convert an ISO-formatted timestamp string into a human-readable date string.
 
         Args:
-            date: Timestamp string in ISO format (e.g., "2026-01-18T14:30:52.005468").
+            timestamp: Timestamp string in ISO format (e.g., "2026-01-18T14:30:52.005468").
 
         Returns:
             str: Formatted date string (e.g., "18.01.2026 14:30:52").
         """
     dt = datetime.fromisoformat(timestamp)
     return dt.strftime("%d.%m.%Y %H:%M:%S")
+
+
+def _to_int_or_none(value: Any) -> Optional[int]:
+    """Convert value to int, return None if value is empty/invalid."""
+    if value is None:
+        return None
+    if isinstance(value, int):
+        return value
+    s = str(value).strip()
+    if s == "":
+        return None
+    try:
+        return int(s)
+    except (TypeError, ValueError):
+        return None
+
+
+def normalize_year_range_for_category(year_from: Any, year_to: Any,
+                                      allowed_year_from: int, allowed_year_to: int) -> Tuple[int, int]:
+    """
+    Normalize user input year range to fit into [allowed_year_from, allowed_year_to].
+
+    Rules:
+    - If year_from is missing/invalid -> allowed_year_from
+    - If year_to is missing/invalid -> allowed_year_to
+    - If year_from < allowed_year_from -> allowed_year_from
+    - If year_to > allowed_year_to -> allowed_year_to
+    - If after normalization year_from > year_to -> swap (or clamp both to a single year)
+    """
+    yf = _to_int_or_none(year_from)
+    yt = _to_int_or_none(year_to)
+
+    if yf is None:
+        yf = allowed_year_from
+    if yt is None:
+        yt = allowed_year_to
+
+    # clamp into allowed range
+    if yf < allowed_year_from:
+        yf = allowed_year_from
+    if yf > allowed_year_to:
+        yf = allowed_year_to
+
+    if yt > allowed_year_to:
+        yt = allowed_year_to
+    if yt < allowed_year_from:
+        yt = allowed_year_from
+
+    # make range valid
+    if yf > yt:
+        yf, yt = yt, yf
+
+    return yf, yt
 
 
 class FilmSearchService:
@@ -208,9 +261,20 @@ class FilmSearchService:
         category_id = dict_category.get("category_id")
         category_name = dict_category.get("category_name")
         try:
-            items = repo.search_films_by_category_in_year_range(conn, category_id, year_from, year_to, page_size,
-                                                                offset)
-            total = repo.count_films_by_category_in_year_range(conn, category_id, year_from, year_to)
+
+            period = repo.get_year_range_by_category(conn, category_id)
+            allowed_from = int(period.get("year_from", 0))
+            allowed_to = int(period.get("year_to", 0))
+
+            norm_year_from, norm_year_to = normalize_year_range_for_category(
+                year_from, year_to, allowed_from, allowed_to
+            )
+
+            items = repo.search_films_by_category_in_year_range(conn, category_id,
+                                                                norm_year_from, norm_year_to,
+                                                                page_size, offset)
+            total = repo.count_films_by_category_in_year_range(conn, category_id,
+                                                               norm_year_from, norm_year_to)
             pages = calculate_total_pages(total, page_size)
 
             years_range = f"{year_from} - {year_to}"
@@ -232,7 +296,7 @@ class FilmSearchService:
         finally:
             conn.close()
 
-    def get_year_range_by_category(self, dict_category: dict) -> dict:
+    def get_year_range_by_category(self, dict_category: dict) -> list[dict]:
         """
         Get the available release year range for a selected category.
 
@@ -283,7 +347,6 @@ class FilmSearchService:
             return dict_category
         finally:
             conn.close()
-
 
 
 class QueryLogService:
