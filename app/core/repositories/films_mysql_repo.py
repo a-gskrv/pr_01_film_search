@@ -85,7 +85,7 @@ FROM
         JOIN
     category AS c ON (fc.category_id = c.category_id)
 WHERE
-    c.category_id = %(category_id)s AND f.release_year BETWEEN %(year_from)s AND %(year_to)s
+    c.category_id = %(category_id)s AND CAST(f.release_year AS UNSIGNED) BETWEEN %(year_from)s AND %(year_to)s
 LIMIT %(limit)s
 OFFSET %(offset)s
 ;
