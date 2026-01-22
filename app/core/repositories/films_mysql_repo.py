@@ -151,7 +151,7 @@ def get_category_by_category_name(conn, category_name) -> dict:
 
 
 
-def get_year_range_by_category(conn, category_id: str) -> list[dict]:
+def get_year_range_by_category(conn, category_id: str) -> dict:
     """
     Get the available release year range for a selected category.
 

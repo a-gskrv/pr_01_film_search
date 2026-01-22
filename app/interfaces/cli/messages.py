@@ -9,6 +9,7 @@ class RuCliMessages:
 Отчеты:
 4. Пять последних запросов.
 5. Топ пять популярных запросов.
+6. Показать все отчёты
 
 0. Выход.
 
@@ -46,6 +47,9 @@ class RuCliMessages:
     films_by_category_header = "Фильмы в жанре: '{category_name}'"
     films_by_category_period_header = "Фильмы в жанре: '{category_name}' за период: '{period}'"
 
+    last_queries_header = "Последние 5 уникальных запросов"
+    top_queries_header = "Топ-5 самых популярных запросов"
+
 class EnCliMessages:
     main_menu: str = """
 *********** MAIN MENU ***********
@@ -57,6 +61,7 @@ Film search:
 Reports:
 4. Last 5 unique queries.
 5. Top 5 most frequent queries.
+6. Show all reports
 
 0. Exit.
 
@@ -94,6 +99,9 @@ Navigation: Next - N, Previous - P, Quit - 0, or enter a page number: """
     films_by_category_header = "Films in category: '{category_name}'"
     films_by_category_period_header = "Films in category: '{category_name}' for period: '{period}'"
 
+    last_queries_header = "Last 5 unique queries"
+    top_queries_header = "Top 5 most popular queries"
+
 
 class DeCliMessages:
     main_menu: str = """
@@ -106,6 +114,7 @@ Filmsuche:
 Berichte:
 4. Letzte 5 eindeutige Suchanfragen.
 5. Top 5 häufigste Suchanfragen.
+6. Alle Berichte anzeigen
 
 0. Beenden.
 
@@ -142,4 +151,8 @@ Navigation: Nächste - N, Vorherige - P, Beenden - 0, oder Seitenzahl eingeben: 
     films_by_keyword_header = "Filme nach Stichwort: '{keyword}'"
     films_by_category_header = "Filme in der Kategorie: '{category_name}'"
     films_by_category_period_header = "Filme in der Kategorie: '{category_name}' im Zeitraum: '{period}'"
+
+    last_queries_header = "Letzte 5 eindeutige Anfragen"
+    top_queries_header = "Top 5 der beliebtesten Anfragen"
+
 

@@ -263,17 +263,36 @@ def paginate(fetch_page_fn: Callable[..., dict],
         is_first_page = False
 
 
-def get_top_5queries():
+def show_top_5queries():
     """Display the top 5 most frequent search queries."""
     qs = QueryLogService()
     result = qs.get_top_queries(limit=5)
+    print(msg.top_queries_header)
     formatters.print_top_queries(result)
     input(msg.press_enter_to_return_to_menu)
 
 
-def get_last_unique_queries():
+def show_last_unique_queries():
     """Display the last unique search queries."""
     qs = QueryLogService()
     result = qs.get_last_unique_queries()
+    print(msg.last_queries_header)
     formatters.print_last_unique_queries(result)
+    input(msg.press_enter_to_return_to_menu)
+
+
+def show_all_reports():
+    """Display the last unique search queries."""
+    qs = QueryLogService()
+
+    result = qs.get_last_unique_queries()
+    print(msg.last_queries_header)
+    formatters.print_last_unique_queries(result)
+
+    print("*" * 50, "\n")
+
+    result = qs.get_top_queries(limit=5)
+    print(msg.top_queries_header)
+    formatters.print_top_queries(result)
+
     input(msg.press_enter_to_return_to_menu)

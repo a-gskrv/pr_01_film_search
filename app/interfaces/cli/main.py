@@ -19,9 +19,11 @@ def main():
         elif user_choice == '3':
             handlers.search_film_by_category_year()
         elif user_choice == '4':
-            handlers.get_last_unique_queries()
+            handlers.show_last_unique_queries()
         elif user_choice == '5':
-            handlers.get_top_5queries()
+            handlers.show_top_5queries()
+        elif user_choice == '6':
+            handlers.show_all_reports()
         else:
             print(msg.input_error)
             input(msg.press_enter_to_return_to_menu)

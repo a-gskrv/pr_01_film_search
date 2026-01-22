@@ -160,7 +160,8 @@ class FilmSearchService:
 
             if log:
                 search_type = "keyword"
-                params = {"keyword": keyword, "results_count": total}
+                lower_keyword = keyword.lower()
+                params = {"keyword": lower_keyword, "results_count": total}
                 log_search_query(search_type, params)
 
             return {

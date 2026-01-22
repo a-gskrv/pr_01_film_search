@@ -1,8 +1,7 @@
 from collections.abc import Callable
 from typing import Any
 
-from app.core.services import FilmSearchService
-from app.core.query_log_service import QueryLogService
+from app.core.services import FilmSearchService, QueryLogService
 
 
 ACTION_REGISTRY: dict[str, dict[str, Any]] = {}
